@@ -115,7 +115,7 @@ gspowers 是一个全局安装的 Claude Code skill（`~/.claude/skills/gspowers
 检查三项，缺失则提示安装后停止：
 
 - `~/.claude/skills/gstack/` 目录存在 → gstack 已安装
-- `~/.claude/skills/superpowers/` 目录存在 → superpowers 已安装
+- superpowers 已安装（确认 `superpowers:brainstorming` 出现在可用 skills 列表中——superpowers 作为 Claude Code plugin 安装，不在 `~/.claude/skills/` 目录下）
 - `.git/` 存在 → git 已初始化。不存在则提示 `git init`
 
 ### 2. 收集项目信息
