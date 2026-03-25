@@ -88,7 +88,7 @@ gspowers 是一个全局安装的 Claude Code skill（`~/.claude/skills/gspowers
 ★ 执行期 ──────────── /clear ────
 ├─ [{status}] brainstorming
 ├─ [{status}] writing-plans
-├─ [{status}] subagent-development
+├─ [{status}] subagent-dev
 ★ 收尾期 ──────────── /clear ────
 ├─ [{status}] /review
 ├─ [{status}] /qa (条件: has_ui)
@@ -115,18 +115,19 @@ gspowers 是一个全局安装的 Claude Code skill（`~/.claude/skills/gspowers
 检查三项，缺失则提示安装后停止：
 
 - `~/.claude/skills/gstack/` 目录存在 → gstack 已安装
-- superpowers skill 已安装（检查 brainstorming skill 是否在可用 skill 列表中）
+- `~/.claude/skills/superpowers/` 目录存在 → superpowers 已安装
 - `.git/` 存在 → git 已初始化。不存在则提示 `git init`
 
-### 2. 收集项目信息（三个问题）
+### 2. 收集项目信息
 
 **Q1**: "这是新项目还是已有项目的迭代？"
 - 新项目 → `project_type = "new"`
 - 已有项目 → `project_type = "existing"`，提示准备 Update_Plan.md 并给出模板
 
-**Q2**: "选择流程模式："
+**Q2**（仅新项目）: "选择流程模式："
 - 完整模式 → `mode = "full"`
 - 快速模式 → `mode = "quick"`（跳过 office-hours + plan-ceo-review）
+- existing 项目自动设为 `mode = "quick"`（office-hours + plan-ceo-review 本就不适用），跳过此问题
 
 **Q3**: "这个项目有前端 UI 吗？"
 - 有 → `has_ui = true`
@@ -138,10 +139,7 @@ gspowers 是一个全局安装的 Claude Code skill（`~/.claude/skills/gspowers
 |-------------|------|-------------|
 | new | full | office-hours |
 | new | quick | plan-eng-review |
-| existing | full | plan-eng-review |
-| existing | quick | plan-eng-review |
-
-注：existing + quick 与 existing + full 起点相同，快捷模式对老项目无额外效果。
+| existing | quick (自动) | plan-eng-review |
 
 ### 4. 创建文件
 
@@ -172,6 +170,8 @@ gspowers 是一个全局安装的 Claude Code skill（`~/.claude/skills/gspowers
 ## plan.md — 规划期
 
 当 `current_phase = "plan"` 时加载。
+
+注：existing 项目跳过 office-hours 和 plan-ceo-review，直接从 plan-eng-review 开始。plan-ceo-review 仅在新项目完成 office-hours 后询问（因为 CEO 审查需要 product-requirements 作为输入）。
 
 ### office-hours
 
@@ -227,8 +227,9 @@ brainstorming 完成后自动衔接 writing-plans（同一上下文，无需 /cl
 - 两者都有 → `current_step → "subagent-dev"`
 
 收集产出：
-- `docs/superpowers/specs/*.md` → `.gspowers/artifacts/design-spec.md`
-- `docs/superpowers/plans/*.md` → `.gspowers/artifacts/implementation-plan.md`
+- design spec → `.gspowers/artifacts/design-spec.md`
+- implementation plan → `.gspowers/artifacts/implementation-plan.md`
+- 调度器列出可能的产出文件路径，让用户确认具体哪个文件
 
 ### writing-plans
 
@@ -244,7 +245,7 @@ brainstorming 完成后自动衔接 writing-plans（同一上下文，无需 /cl
 
 完成后收集 implementation-plan，更新 `current_step → "subagent-dev"`。
 
-### subagent-development
+### subagent-dev
 
 提示用户执行子代理开发（同一上下文中直接继续或 /clear 后重新触发）：
 
