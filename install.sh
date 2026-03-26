@@ -7,6 +7,8 @@ SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 SOURCE="$SCRIPT_DIR/skills/gspowers"
 TARGET="$HOME/.claude/skills/gspowers"
 
+mkdir -p "$(dirname "$TARGET")"
+
 if [ -L "$TARGET" ]; then
   echo "Updating existing symlink..."
   rm "$TARGET"

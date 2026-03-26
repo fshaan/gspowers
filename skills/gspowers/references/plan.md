@@ -51,9 +51,18 @@
 
 ## plan-eng-review
 
-根据 state.json 中的 `project_type` 提示不同输入：
+根据 state.json 中的 `project_type` 和 `mode` 提示不同输入：
 
-**新项目：**
+**新项目（完整模式）：**
+```
+/plan-eng-review
+
+请读取 .gspowers/artifacts/product-requirements.md 作为输入。
+```
+
+**新项目（快速模式）：** office-hours 被跳过，没有 product-requirements.md。
+先询问用户："快速模式跳过了 office-hours，请简要描述你要做什么（一段话即可），我来作为 plan-eng-review 的输入。"
+将用户的描述写入 `.gspowers/artifacts/product-requirements.md`，然后：
 ```
 /plan-eng-review
 

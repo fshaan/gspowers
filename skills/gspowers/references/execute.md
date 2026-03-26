@@ -81,10 +81,11 @@
 ```
 
 用户完成后：
-1. 将 `"subagent-dev"` 加入 `completed_steps`
+1. 将 `"subagent-dev"` 加入 `completed_steps`（如果已存在则跳过，不重复）
 2. 设 `current_phase` 为 `"finish"`
 3. 设 `current_step` 为 `"review"`
-4. 更新 state.json + 重写 handoff.md
+4. 如果 `status` 为 `"failed"`，将其重置为 `"in_progress"` 并清除 `failure_reason`（回退修复后恢复正常状态）
+5. 更新 state.json + 重写 handoff.md
 5. 显示：
 
 ```

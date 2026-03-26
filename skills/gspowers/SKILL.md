@@ -19,18 +19,22 @@ description: |
 ## 恢复模式
 
 1. 如果 `.gspowers/handoff.md` 存在，读取并向用户显示状态摘要
-2. 询问用户："上一步（{current_step}）完成了吗？"
+2. **如果 `current_phase = "execute"` 且 `current_step` 是 `"brainstorming"`**：
+   - 跳过通用恢复询问，直接加载 `execute.md`（它有自己的多步完成确认逻辑）
+   - 跳到步骤 3
+3. 否则，询问用户："上一步（{current_step}）完成了吗？"
    - **是** →
      a. 询问产出文件路径，用 `cp` 复制到 `.gspowers/artifacts/`
      b. 更新 state.json（推进 current_step + 加入 completed_steps + 更新 last_updated）
-     c. 同步重写 handoff.md（见下方模板）
-   - **否** → 显示当前步骤的执行命令，等待用户完成
-3. 根据更新后的 `current_phase` 用 Read 工具加载对应指令文件：
+     c. `completed_steps` 中不允许重复值——加入前检查是否已存在
+     d. 同步重写 handoff.md（见下方模板）
+   - **否** → 显示当前步骤的执行命令，等待用户完成，然后停止
+4. 根据更新后的 `current_phase` 用 Read 工具加载对应指令文件：
    - `plan` → `~/.claude/skills/gspowers/references/plan.md`
    - `execute` → `~/.claude/skills/gspowers/references/execute.md`
    - `finish` → `~/.claude/skills/gspowers/references/finish.md`
    - `done` → 显示完成统计摘要（见下方模板）
-4. 按加载的指令文件执行
+5. 按加载的指令文件执行
 
 ## 步骤推进映射
 

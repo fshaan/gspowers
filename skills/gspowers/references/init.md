@@ -55,6 +55,8 @@ state.json 不存在，执行首次启动流程。
 执行以下操作：
 
 1. 创建目录：`mkdir -p .gspowers/artifacts`
+2. 确保 `.gspowers/` 在 `.gitignore` 中（state.json 包含本地路径和时间戳，不应提交）：
+   用 Bash 检查并追加：`grep -q '^\.gspowers/' .gitignore 2>/dev/null || echo '.gspowers/' >> .gitignore`
 
 2. 用 Write 工具写入 `.gspowers/state.json`：
 
