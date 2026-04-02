@@ -23,7 +23,9 @@ state.json 不存在，执行首次启动流程。
 
 - 新项目 → `project_type = "new"`
 - 已有项目 → `project_type = "existing"`
-  - 告诉用户需要在项目根目录创建 `Update_Plan.md`，给出模板（见下方）
+  - 用 Bash 检查：`test -f Update_Plan.md && echo exists || echo missing`
+  - **exists** → 显示 "检测到已有 Update_Plan.md，使用现有文件继续"
+  - **missing** → 执行自动生成流程（见下方「Update_Plan.md 自动生成」）
   - 自动设置 `mode = "quick"`，跳过 Q2
 
 **Q2**（仅新项目）: "选择流程模式：完整模式（走全部步骤）还是快速模式（跳过 office-hours 和 plan-ceo-review）？"
@@ -88,22 +90,40 @@ state.json 不存在，执行首次启动流程。
      - new → `/plan-eng-review`（读取产品需求）
      - existing → `/plan-eng-review`（读取 Update_Plan.md）
 
-## Update_Plan.md 模板
+## Update_Plan.md 自动生成
 
-对 existing 项目，显示以下模板让用户在项目根目录创建：
+当 existing 项目没有 Update_Plan.md 时，执行以下流程：
 
-```markdown
-# 更新计划
+1. 询问用户：
+   > "请用自然语言描述你这次要做什么更新。
+   > 比如：修复什么问题、添加什么功能、优化什么流程。
+   > 尽量说清楚问题现状、期望结果和约束条件。"
 
-## 问题现状
-<!-- 当前遇到的具体问题，越具体越好 -->
+2. 根据用户描述，生成 Update_Plan.md 内容，填充 4 个字段（问题现状、期望结果、约束条件、影响范围）。文件头部加 `<!-- generated-by: gspowers-v1.1 -->` 标记。模板结构：
 
-## 期望结果
-<!-- 修复/优化后应该达到的状态 -->
+   ```markdown
+   <!-- generated-by: gspowers-v1.1 -->
+   # 更新计划
 
-## 约束条件
-<!-- 不能动的部分：已有依赖、兼容性要求、技术栈限制等 -->
+   ## 问题现状
+   {根据用户描述填充}
 
-## 影响范围
-<!-- 本次更新涉及的模块/文件/功能 -->
-```
+   ## 期望结果
+   {根据用户描述填充}
+
+   ## 约束条件
+   {根据用户描述填充，若未提及则写"用户未指定，请在 plan-eng-review 中确认"}
+
+   ## 影响范围
+   {根据用户描述填充}
+   ```
+
+3. 展示生成的完整内容给用户确认：
+   > "以下是根据你的描述生成的更新计划，请确认或修改：
+   > [展示完整内容]
+   > 确认无误？（是 / 需要修改）"
+
+4. 用户确认 → 用 Write 工具写入 `Update_Plan.md`
+   用户要修改 → 根据反馈调整后重新展示，直到确认
+
+5. 继续 Q3（has_ui 询问）
