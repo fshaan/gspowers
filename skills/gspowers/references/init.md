@@ -64,7 +64,7 @@ state.json 不存在，执行首次启动流程。
 
 ```json
 {
-  "version": "1.0",
+  "version": "1.1",
   "project_type": "{计算值}",
   "mode": "{计算值}",
   "has_ui": {计算值},

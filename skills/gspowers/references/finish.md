@@ -96,10 +96,11 @@
    > "在回答之前回顾一下本次开发过程：
    > - 遇到了意外的坑或 debug 难题吗？
    > - 发现了什么新的最佳实践或更好的做法？
-   > - 有什么下次想避免或改进的？"
+   > - 有什么下次想避免或改进的？
+   > （输入"跳过"可直接进入 document-release）"
 
 3. **根据回答**：
-   - 全部"否" → 将 `"compound"` 加入 `skipped_steps`，设 `current_step` 为 `"document-release"`，更新 state.json + 重写 handoff.md，跳到 document-release
+   - "跳过"或全部"否" → 将 `"compound"` 加入 `skipped_steps`，设 `current_step` 为 `"document-release"`，更新 state.json + 重写 handoff.md，跳到 document-release
    - 任一"是" → 提示用户执行：
 
    ```

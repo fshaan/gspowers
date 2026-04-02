@@ -10,6 +10,8 @@
 
 在提示 brainstorming 之前，自动搜索历史经验（导航员模式的唯一例外：只读预处理）。
 
+0. **清理上一轮残留**：用 Bash 执行 `rm -f .gspowers/artifacts/prior-learnings.md`，并从 state.json 的 `artifacts` 中移除 `"prior-learnings"` 键（如果存在）。确保每次 brainstorming 获取新鲜结果。
+
 1. 用 Bash 检查：`test -d docs/solutions/ && echo exists || echo missing`
    - **missing** → 显示："📚 未找到历史经验库（docs/solutions/），从零开始 brainstorming"，跳到步骤 3
 
@@ -27,7 +29,7 @@
      在 state.json `artifacts` 中记录 `"prior-learnings": ".gspowers/artifacts/prior-learnings.md"`
      显示："📚 找到 {N} 条相关历史经验，已写入 prior-learnings.md"
    - **无结果** → 显示："📚 未找到相关历史经验，从零开始 brainstorming"，不生成 prior-learnings.md
-   - **agent 派发失败** → 静默降级，等同无结果
+   - **agent 派发失败** → 显示："⚠️ 知识搜索未能执行（agent 派发失败），从零开始 brainstorming"，在 state.json `artifacts` 中记录 `"prior-learnings-status": "agent-failed"`，不生成 prior-learnings.md
 
 3. 提示用户执行：
 
