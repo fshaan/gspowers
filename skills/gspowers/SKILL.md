@@ -2,7 +2,7 @@
 name: gspowers
 description: |
   AI 开发全流程编排器。协调 gstack（产品/架构）和 superpowers（工程/测试）。
-  运行 /gspowers 查看当前进度和下一步操作。
+  运行 /gspowers 查看当前进度和下一步操作。可生成脚手架文件（如 Update_Plan.md）。
 ---
 
 # gspowers — 开发流程导航员
@@ -49,7 +49,8 @@ writing-plans → subagent-dev                                [execute]
 subagent-dev → review                                       [finish]
 review → qa（若 has_ui）或 ship                              [finish]
 qa → ship                                                   [finish]
-ship → document-release                                     [finish]
+ship → compound                                             [finish]
+compound → document-release                                 [finish]
 document-release → （current_phase 设为 done）               [done]
 ```
 
@@ -70,6 +71,7 @@ document-release → （current_phase 设为 done）               [done]
 ├─ [{status}] /review
 ├─ [{status}] /qa (条件: has_ui)
 ├─ [{status}] /ship
+├─ [{status}] /ce:compound (可选)
 └─ [{status}] /document-release
 ```
 
