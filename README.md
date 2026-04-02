@@ -33,6 +33,7 @@ gspowers 是一个"导航员"——不自动执行命令，而是告诉你当前
 ├─ /review               (gstack)
 ├─ /qa (仅 UI 项目)      (gstack)
 ├─ /ship                 (gstack)
+├─ /ce:compound (可选)   (CE plugin)
 └─ /document-release     (gstack)
 ```
 
@@ -62,8 +63,10 @@ skills/gspowers/
 
 - [完整 SOP](skills/gspowers/references/sop.md) — 操作手册、state.json 字段、异常处理
 - [补充工具](skills/gspowers/references/tools-guide.md) — /retro, /investigate, /cso 等
-- [技术设计](docs/superpowers/specs/2026-03-25-gspowers-skill-design.md) — 架构决策和设计细节
-- [实现计划](docs/superpowers/plans/2026-03-25-gspowers-skill.md) — 开发任务分解
+- [技术设计 v1.0](docs/superpowers/specs/2026-03-25-gspowers-skill-design.md) — 架构决策和设计细节
+- [技术设计 v1.1](docs/superpowers/specs/2026-04-01-gspowers-v1.1-design.md) — 知识复利闭环
+- [实现计划 v1.0](docs/superpowers/plans/2026-03-25-gspowers-skill.md) — 开发任务分解
+- [实现计划 v1.1](docs/superpowers/plans/2026-04-02-gspowers-v1.1-knowledge-compounding.md) — 知识复利实现
 
 ## License
 
