@@ -75,8 +75,41 @@
 1. 询问 PR 链接
 2. 将 `"ship"` 加入 `completed_steps`
 3. 在 state.json 的 `artifacts` 中记录 `"pr_link": "<用户提供的链接>"`
-4. 设 `current_step` 为 `"document-release"`
+4. 设 `current_step` 为 `"compound"`
 5. 更新 state.json + 重写 handoff.md
+
+---
+
+## compound
+
+> 可选步骤。将本次开发经验沉淀到 `docs/solutions/`，形成知识复利。
+
+1. **可用性检查**：检查当前会话的可用 skills 列表中是否包含 `compound-engineering:ce-compound`（即 `/ce:compound`）
+   - 不可用 → 显示："ce:compound 不可用，跳过经验沉淀"
+   - 将 `"compound"` 加入 `skipped_steps`
+   - 设 `current_step` 为 `"document-release"`
+   - 更新 state.json + 重写 handoff.md
+   - 跳到 document-release
+
+2. **引导式提问**（帮助用户判断是否有经验值得记录）：
+
+   > "在回答之前回顾一下本次开发过程：
+   > - 遇到了意外的坑或 debug 难题吗？
+   > - 发现了什么新的最佳实践或更好的做法？
+   > - 有什么下次想避免或改进的？"
+
+3. **根据回答**：
+   - 全部"否" → 将 `"compound"` 加入 `skipped_steps`，设 `current_step` 为 `"document-release"`，更新 state.json + 重写 handoff.md，跳到 document-release
+   - 任一"是" → 提示用户执行：
+
+   ```
+   /ce:compound
+   ```
+
+4. **用户完成后**：
+   1. 将 `"compound"` 加入 `completed_steps`
+   2. 设 `current_step` 为 `"document-release"`
+   3. 更新 state.json + 重写 handoff.md
 
 ---
 
