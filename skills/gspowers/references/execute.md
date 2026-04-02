@@ -6,13 +6,46 @@
 
 ## brainstorming
 
-提示用户执行：
+### 前置知识搜索
 
-```
-/brainstorm
+在提示 brainstorming 之前，自动搜索历史经验（导航员模式的唯一例外：只读预处理）。
 
-请读取 .gspowers/artifacts/architecture.md 作为架构输入。
-```
+1. 用 Bash 检查：`test -d docs/solutions/ && echo exists || echo missing`
+   - **missing** → 显示："📚 未找到历史经验库（docs/solutions/），从零开始 brainstorming"，跳到步骤 3
+
+2. **exists** → 用 Agent 工具派发 `learnings-researcher` agent（`subagent_type` 设为 `compound-engineering:research:learnings-researcher`）：
+   - 先用 Read 工具读取项目输入文件（existing 项目读 `Update_Plan.md`，new 项目读 `.gspowers/artifacts/product-requirements.md`），提取项目主题摘要
+   - agent prompt：`"搜索 docs/solutions/ 中与以下主题相关的历史经验：{项目主题摘要}。优先匹配 YAML frontmatter 中的 tags 和 problem 字段，其次全文。返回最相关的 ≤3 条结果，每条包含文件路径和关键要点摘要。"`
+   - **有结果** → 按以下格式写入 `.gspowers/artifacts/prior-learnings.md`：
+     ```markdown
+     ## 相关历史经验 (From docs/solutions/)
+
+     - **[文件名]**: [核心要点摘要]
+       - **关联风险**: [曾经踩过的坑]
+       - **建议做法**: [本次可复用的实践]
+     ```
+     在 state.json `artifacts` 中记录 `"prior-learnings": ".gspowers/artifacts/prior-learnings.md"`
+     显示："📚 找到 {N} 条相关历史经验，已写入 prior-learnings.md"
+   - **无结果** → 显示："📚 未找到相关历史经验，从零开始 brainstorming"，不生成 prior-learnings.md
+   - **agent 派发失败** → 静默降级，等同无结果
+
+3. 提示用户执行：
+
+   有 `prior-learnings.md` 时：
+   ```
+   /brainstorm
+
+   请读取以下文件作为输入：
+   - .gspowers/artifacts/architecture.md（架构）
+   - .gspowers/artifacts/prior-learnings.md（历史经验）
+   ```
+
+   无 `prior-learnings.md` 时：
+   ```
+   /brainstorm
+
+   请读取 .gspowers/artifacts/architecture.md 作为架构输入。
+   ```
 
 > brainstorming 完成后会自动衔接 writing-plans，无需返回调度器。
 > writing-plans 完成后可直接选择子代理执行。
