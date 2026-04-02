@@ -68,3 +68,34 @@
 ```
 
 覆盖：secrets 考古、依赖供应链、CI/CD 安全、OWASP Top 10 等。
+
+
+---
+
+## /ce:compound — 经验沉淀
+
+**何时用：** 每次 /ship 后，有值得记录的经验时。
+
+**时机：** ship 之后、document-release 之前。已整合为 gspowers 主流程中的可选步骤。
+
+**命令：**
+```
+/ce:compound
+```
+
+将本次开发中的问题解决方案结构化记录到 `docs/solutions/`，带 YAML frontmatter 便于未来搜索。gspowers 在后续项目的 brainstorming 前会自动搜索这些经验。
+
+---
+
+## /ce:compound-refresh — 经验刷新
+
+**何时用：** 重构、迁移、依赖升级后，检查历史经验是否过时。
+
+**时机：** 周期性执行，不在单次开发流中。
+
+**命令：**
+```
+/ce:compound-refresh
+```
+
+审查 `docs/solutions/` 中的文档，更新、合并或标记过时的经验记录。
